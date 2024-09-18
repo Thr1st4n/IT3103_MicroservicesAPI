@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  },
+  "name": "it3103_microservicesapi",
+  "description": "",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"node CustomerService/server.js\" \"node OrderService/server.js\" \"node ProductService/server.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
