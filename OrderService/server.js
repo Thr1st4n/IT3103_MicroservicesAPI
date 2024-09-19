@@ -12,14 +12,14 @@ app.post('/orders', async (req, res) => {
 
     
     try {
-        await axios.get(http://localhost:3002/customers/${customerId});
+        await axios.get(`http://localhost:3002/customers/${customerId}`);
     } catch {
         return res.status(400).send('Invalid customer ID');
     }
 
   
     try {
-        await axios.get(http://localhost:3001/products/${productId});
+        await axios.get(`http://localhost:3001/products/${productId}`);
     } catch {
         return res.status(400).send('Invalid product ID');
     }
