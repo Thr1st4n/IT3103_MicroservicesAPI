@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 
-// Start Product Service
+// Start ProductService
 exec('node product-service/server.js', (err, stdout, stderr) => {
     if (err) {
         console.error(`Error starting Product Service: ${err.message}`);
@@ -8,7 +8,7 @@ exec('node product-service/server.js', (err, stdout, stderr) => {
     console.log(`Product Service: ${stdout}`);
 });
 
-// Start Customer Service
+// Start CustomerService
 exec('node customer-service/server.js', (err, stdout, stderr) => {
     if (err) {
         console.error(`Error starting Customer Service: ${err.message}`);
@@ -16,7 +16,7 @@ exec('node customer-service/server.js', (err, stdout, stderr) => {
     console.log(`Customer Service: ${stdout}`);
 });
 
-// Start Order Service
+// Start OrderService
 exec('node order-service/server.js', (err, stdout, stderr) => {
     if (err) {
         console.error(`Error starting Order Service: ${err.message}`);
