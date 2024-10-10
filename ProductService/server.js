@@ -1,10 +1,33 @@
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
+
 app.use(express.json());
 
 let products = [];
 let nextProductId = 1;
 
+function authenticateToken(req, res, next) {
+    const token = req.header('Authorization');
+    if (!token) return res.status(401).send('Access Denied: No Token Provided');
+
+    try {
+        // Split the token and verify the actual token
+        const verified = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET || 'yourSecretKey'); // Secret Key from environment variable
+        req.user = verified;
+        next(); // Proceed if the token is valid
+    } catch (err) {
+        res.status(400).send('Invalid Token');
+    }
+}
+function authorizeRole(roles) {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).send('Access Denied: Insufficient Permissions');
+        }
+        next();
+    };
+}
 
 app.post('/products', (req, res) => {
     const product = { id: nextProductId++, ...req.body };
@@ -41,3 +64,4 @@ app.delete('/products/:productId', (req, res) => {
 });
 
 app.listen(3001, () => console.log('Product Service running on port 3001'));
+
