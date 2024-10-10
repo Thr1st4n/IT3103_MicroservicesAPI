@@ -7,6 +7,9 @@ app.use(express.json());
 let orders = [];
 let nextOrderId = 1;
 
+
+const secretKey = 'yourSecretKey';
+
 function authenticateToken(req, res, next) {
     const token = req.header('Authorization');
     if (!token) return res.status(401).send('Access Denied: No Token Provided');
