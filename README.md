@@ -1,6 +1,5 @@
 # IT3103_MicroservicesAPI 
-by: Regis, Thristan Jade 
-    Mariano, Luis Emmanuel 
+by: Regis, Thristan Jade & Mariano, Luis Emmanuel 
 
 How to start : npm start at main.js, this will run the three services. 
 
