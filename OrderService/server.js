@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const jwt = require('jsonwebtoken');
+const limiter = require('../limiter');
 app.use(express.json());
 
 let orders = [];
@@ -37,7 +38,7 @@ app.post('/orders', authenticateToken, authorizeRole(['customer', 'admin']), asy
 
 
     try {
-        await axios.get('http://localhost:3002/customers/${customerId}', {
+        await axios.get(`http://localhost:3002/customers/${customerId}`, {
             headers: { Authorization: req.header('Authorization') }
         });
     } catch {
@@ -46,7 +47,7 @@ app.post('/orders', authenticateToken, authorizeRole(['customer', 'admin']), asy
 
 
     try {
-        await axios.get('http://localhost:3001/products/${productId}', {
+        await axios.get(`http://localhost:3001/products/${productId}`, {
             headers: { Authorization: req.header('Authorization') }
         });
     } catch {
@@ -60,7 +61,7 @@ app.post('/orders', authenticateToken, authorizeRole(['customer', 'admin']), asy
 });
 
 
-app.get('/orders/:orderId', authenticateToken, (req, res) => {
+app.get('/orders/:orderId',limiter, authenticateToken, (req, res) => {
     const order = orders.find(o => o.id == req.params.orderId);
     order ? res.json(order) : res.status(404).send('Order not found');
 });

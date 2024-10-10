@@ -1,8 +1,17 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 
 app.use(express.json());
+
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000,  
+    max: 5,  
+    message: 'Too many requests from this IP, please try again later.'
+});
+
+
 
 let products = [];
 let nextProductId = 1;
@@ -36,7 +45,7 @@ app.post('/products', authenticateToken, authorizeRole(['admin']), (req, res) =>
 });
 
 
-app.get('/products', authenticateToken, (req, res) => {
+app.get('/products',limiter, authenticateToken, (req, res) => {
     res.json(products);
 });
 

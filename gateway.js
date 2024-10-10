@@ -1,10 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const httpProxy = require('http-proxy');
-
+const limiter = require ('./limiter');
 const app = express();
 const proxy = httpProxy.createProxyServer();
 
+app.use(limiter);
 
 function authenticateToken(req, res, next) {
   const token = req.header('Authorization');

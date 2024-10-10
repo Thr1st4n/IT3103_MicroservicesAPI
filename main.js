@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 
+
 // Start ProductService
 exec('node product-service/server.js', (err, stdout, stderr) => {
     if (err) {

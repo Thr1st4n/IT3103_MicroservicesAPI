@@ -1,22 +1,26 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const router = express.Router();
+const limiter = require ('../limiter');
+
 
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
 
+router.use(limiter);
 
 const globalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 100, 
+    windowMs: 1 * 60 * 1000, 
+    max: 5, 
     message: 'Too many requests, please try again later'
 });
 
 
 const loginLimiter = rateLimit({
-    windowMs: 10 * 60 * 1000, 
+    windowMs: 1 * 60 * 1000, 
     max: 5, 
     message: 'Too many login attempts, please try again later'
 });
@@ -62,16 +66,16 @@ app.post('/register', async (req, res) => {
 }); 
 
 
-app.post('/login', async (req, res) => { 
-    const { username, password } = req.body; 
-    const customer = customers.find(c => c.username === username); 
-    if (customer && await bcrypt.compare(password, customer.password)) { 
-        const token = jwt.sign({ id: customer.id, role: customer.role }, secretKey, { expiresIn: '1h' }); 
-        res.json({ token }); 
+app.post('/login', loginLimiter, async (req, res) => {
+    const { username, password } = req.body;
+    const customer = customers.find(c => c.username === username);
+    if (customer && await bcrypt.compare(password, customer.password)) {
+        const token = jwt.sign({ id: customer.id, role: customer.role }, secretKey, { expiresIn: '1h' });
+        res.json({ token });
     } else {
-        res.status(401).json({ message: 'Invalid username or password' }); 
-    } 
-}); 
+        res.status(401).json({ message: 'Invalid username or password' });
+    }
+});
 
 
 app.post('/customers', authenticateToken, (req, res) => {
